@@ -24,7 +24,7 @@ test("one setup command installs a usable versioned CLI without changing an exis
   const doctor = Bun.spawn([binary, "doctor"], { stdout: "pipe", stderr: "pipe", env: { ...process.env, SIDEBAND_CONFIG: undefined } });
   expect(await doctor.exited).toBe(0);
   expect(await new Response(doctor.stdout).text()).toContain("Workshop");
-  expect(existsSync(join(f.dir, "project", "state", "mail.sqlite"))).toBe(false);
+  expect(existsSync(join(f.dir, "project", "state", "sideband.json", "mail.sqlite"))).toBe(false);
   const repeated = await cli("install", "--root", f.root, "--config", f.config, "--name", "Must not replace Workshop");
   expect(repeated.code).toBe(0);
   expect(readFileSync(f.config, "utf8")).toBe(original);

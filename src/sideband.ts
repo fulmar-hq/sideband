@@ -37,7 +37,7 @@ try {
   } else {
     process.env.SIDEBAND_CONFIG = resolve(file); // Never use the legacy Sideband fallback from this entrypoint.
     const cfg = loadConfig();
-    if (command === "doctor") console.log(`Sideband${VERSION}; configuration valid\nProject: ${cfg.project!.name}\nConfiguration: ${resolve(file)}\nHost bindings: ${cfg.project!.agents.length}\nTelegram: ${cfg.project!.telegram ? "configured; connection not tested" : "off"}\nHost connections and delivery: not tested. Add bindings in the configuration before sending.`);
+    if (command === "doctor") console.log(`Sideband${VERSION}; configuration valid\nProject: ${cfg.project!.name}\nConfiguration: ${resolve(file)}\nMail store: ${cfg.db}\nHost bindings: ${cfg.project!.agents.length}\nTelegram: ${cfg.project!.telegram ? "configured; connection not tested" : "off"}\nHost connections and delivery: not tested. Add bindings in the configuration before sending.`);
     else if (command === "serve") {
       if (args.length) throw new Error("Unknown serve arguments");
       await import("./server");

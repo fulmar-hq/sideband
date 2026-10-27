@@ -42,7 +42,7 @@ describe("independent project configuration", () => {
     } });
     const cfg = loadConfig();
     const directory = new Directory(cfg);
-    expect(cfg.db).toBe(join(dir, "state", "mail.sqlite"));
+    expect(cfg.db).toBe(join(dir, "state", "sideband.json", "mail.sqlite"));
     expect(codexCaller(cfg, "workshop-thread").address).toBe("Engineer");
     expect(codexCaller(cfg, "unregistered").address).toBeNull();
     expect(claudeCaller(cfg, process.pid).address).toBe("Planner");
@@ -57,7 +57,7 @@ describe("independent project configuration", () => {
     try {
       const { dir } = config({ ...project(), agents: [], coordinators: { claude: null, codex: null } });
       const cfg = loadConfig();
-      expect(cfg.db).toBe(join(dir, "state", "mail.sqlite"));
+      expect(cfg.db).toBe(join(dir, "state", "sideband.json", "mail.sqlite"));
       expect(new Directory(cfg).all()).toEqual([]);
     } finally {
       if (saved === undefined) delete process.env.OTHER_APP_DB;

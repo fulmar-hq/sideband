@@ -1,5 +1,5 @@
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 import { readProjectConfig, projectPath, PROJECT_PATHS, defaultConfigFile, type ProjectConfig } from "./project-config";
 
 export interface Config {
@@ -20,7 +20,7 @@ export interface Config {
 
 export function loadConfig(overrides: Partial<Config> = {}, file = process.env.SIDEBAND_CONFIG ?? defaultConfigFile()): Config {
   if (!file) throw new Error("SIDEBAND_CONFIG must name a configuration file");
-  const project = readProjectConfig(file), home = homedir(), state = projectPath("state", file);
+  const project = readProjectConfig(file), home = homedir(), state = projectPath(join("state", basename(file)), file);
   const launchAgent = process.env.SIDEBAND_AGENT;
   if (launchAgent !== undefined && !project.agents.some((a) => a.address === launchAgent && a.binding === "launch")) throw new Error("Unknown Sideband launch persona");
   const paths = Object.fromEntries(PROJECT_PATHS.flatMap((key) => project.paths?.[key] ? [[key, projectPath(project.paths[key]!, file)]] : []));

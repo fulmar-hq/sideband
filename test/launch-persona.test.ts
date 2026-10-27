@@ -43,3 +43,15 @@ test("an unregistered launch environment refuses startup before creating a store
   const{existsSync}=await import("node:fs");expect(existsSync(join(dir,"state","mail.sqlite"))).toBe(false);
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
+
+test("two config files in one directory do not share inboxes by default",async()=>{
+ const dir=mkdtempSync(join(tmpdir(),"sideband-projects-")),first=join(dir,"first.json"),second=join(dir,"second.json"),clients:Awaited<ReturnType<typeof client>>[]=[];
+ const profile=(name:string)=>({version:1,name,authority:"repository issues",tickets:["#"],agents:[{address:"Planner",app:"claude",role:"coordinator",binding:"launch"},{address:"Engineer",app:"codex",role:"builder",binding:"launch"}],coordinators:{claude:"Planner",codex:null}});
+ writeFileSync(first,JSON.stringify(profile("First")));writeFileSync(second,JSON.stringify(profile("Second")));
+ try{
+  const a=await client(first,"Planner","claude-code"),b=await client(second,"Engineer","codex-mcp-client");clients.push(a,b);
+  expect((await a.call("send",{to:"Engineer",kind:"handoff",reply:"none",summary:"First project only"})).isError).toBeUndefined();
+  expect((await b.call("inbox")).content[0].text).toBe("No unread mail for Engineer.");
+  const receiver=await client(first,"Engineer","codex-mcp-client");clients.push(receiver);expect((await receiver.call("inbox")).content[0].text).toContain("First project only");
+ }finally{await Promise.all(clients.map(c=>c.close()));rmSync(dir,{recursive:true,force:true});}
+});

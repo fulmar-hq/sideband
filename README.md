@@ -24,7 +24,10 @@ bun run setup -- --name "My project" --config "$HOME/.config/sideband/my-project
 One setup command installs locked production dependencies, a versioned runtime,
 launcher and private config. It prints the actual paths and client settings.
 It does not start services, send messages, edit client settings or overwrite an
-existing config. Pick a new config filename for each project.
+existing config. Pick a new config filename for each project. Each file gets its
+own default `state/<config-filename>/mail.sqlite` store beside the config.
+Renaming/moving a config changes that default location; use explicit `paths.db`
+when you need a stable existing store.
 
 The starter pair is **Planner** for Claude Code and **Engineer** for Codex.
 These are examples, not accounts or verified individual chat identities. See

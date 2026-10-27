@@ -3,7 +3,10 @@
 One trusted JSON file configures a project. `SIDEBAND_CONFIG` or CLI `--config`
 selects it; otherwise the standard user config directory is used. Invalid or
 ambiguous explicit configuration refuses startup. Relative paths are resolved
-beside the file. Keep separate projects on separate stores.
+beside the file. The default store is `state/<config-filename>/mail.sqlite`, so
+different files in one directory have separate inboxes. Moving/renaming a config
+changes that default; set explicit `paths.db` to retain a stable store. An explicit
+shared database remains shared by choice, not a security boundary.
 
 Required: version1, name, authority, agents, coordinators and ticket prefixes.
 See the starter example. Roles are builder, coordinator, expert and relay.
