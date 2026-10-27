@@ -16,8 +16,8 @@ and Codex clients. Windows installation is not supported yet.
 ### 1. Install and create a project
 
 ```sh
-git clone https://github.com/fulmar-hq/sideband-open-source.git
-cd sideband-public
+git clone https://github.com/fulmar-hq/sideband.git
+cd sideband
 bun run setup -- --name "My project" --config "$HOME/.config/sideband/my-project.json" --starter-pair
 ```
 
