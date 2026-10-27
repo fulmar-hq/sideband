@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "bun:test";
-import { rmSync, writeFileSync } from "node:fs";
+import { existsSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { makeWorld, type World } from "./fixture";
 
@@ -18,7 +18,7 @@ function fixture() {
     const [out,error,code]=await Promise.all([new Response(child.stdout).text(),new Response(child.stderr).text(),child.exited]);
     return {out,error,code};
   };
-  return {w,run};
+  return {w,run,file};
 }
 const message={to:"Planner",kind:"handoff",reply:"none",ticket:"TASK-4",summary:"Synthetic handoff ready",body:"Only a temporary test message."};
 
@@ -35,7 +35,10 @@ describe("native mail CLI",()=>{
   expect(rows).toEqual([{sender:"Engineer",sender_ref:"synthetic-engineer",recipient:"Planner",summary:message.summary}]);
  });
  it.each([null,"unregistered-thread"])("refuses missing or unknown native context (%s), even with a configured launch persona",async(thread)=>{
-  const {w,run}=fixture();const result=await run(["send",JSON.stringify(message)],thread,"Observer");
+  const {w,run,file}=fixture();const unopened=join(w.dir,"must-not-open.sqlite");
+  writeFileSync(file,JSON.stringify({...w.cfg.project,paths:{...w.cfg.project.paths,db:unopened}}));
+  const result=await run(["send",JSON.stringify(message)],thread,"Observer");
+  expect(existsSync(unopened)).toBe(false);
   expect(result.code).not.toBe(0);expect(result.error).toMatch(/host|thread|identity/i);expect(w.db.query("select count(*) as n from messages").get()).toEqual({n:0});
  });
  it("refuses typed caller fields and malformed message JSON without leaking the supplied text",async()=>{
