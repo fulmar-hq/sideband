@@ -16,7 +16,7 @@ try {
   if (!file.trim()) throw new Error("Choose a nonempty Sideband configuration path");
   const command = args.shift() ?? "help";
   if (command === "--version" || command === "version") console.log(VERSION);
-  else if (command === "help" || command === "--help") console.log("sideband install|init [--config <file>] [--name <project>] [--root <install directory>] [--starter-pair]\nsideband doctor|serve|agents|peek <address>|verify [--config <file>]\nConfiguration, host registration and delivery are separate; setup never starts an agent or edits client settings.");
+  else if (command === "help" || command === "--help") console.log("sideband install|init [--config <file>] [--name <project>] [--root <install directory>] [--starter-pair]\nsideband doctor|serve|agents [--json]|peek <address>|verify [--config <file>]\nsideband send <message-json> [--config <file>] (registered native Codex host only)\nNative CLI details: docs/native-cli.md\nConfiguration, host registration and delivery are separate; setup never starts an agent or edits client settings.");
   else if (command === "install" || command === "init") {
     const root = take("--root");
     const starter = args.indexOf("--starter-pair");
@@ -42,7 +42,7 @@ try {
       if (args.length) throw new Error("Unknown serve arguments");
       await import("./server");
     } else {
-      if (!["agents", "peek", "verify", "telegram", "operator"].includes(command)) throw new Error(`Unknown Sideband command: ${command}`);
+      if (!["agents", "peek", "verify", "telegram", "operator", "send"].includes(command)) throw new Error(`Unknown Sideband command: ${command}`);
       process.argv = [process.argv[0]!, process.argv[1]!, command, ...args]; await import("./cli");
     }
   }
