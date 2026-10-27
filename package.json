@@ -1,0 +1,32 @@
+{
+  "name": "sideband",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Local mail for Claude Code and Codex, with explicit personas and durable receipts.",
+  "type": "module",
+  "engines": {
+    "bun": ">=1.3.14"
+  },
+  "bin": {
+    "sideband": "src/sideband.ts"
+  },
+  "scripts": {
+    "setup": "bun src/sideband.ts install",
+    "release:package": "bun scripts/package.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "privacy": "bun scripts/privacy-scan.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1"
+  },
+  "devDependencies": {
+    "@types/bun": "1.3.14",
+    "typescript": "5.9.3"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fulmar-hq/sideband-open-source.git"
+  }
+}

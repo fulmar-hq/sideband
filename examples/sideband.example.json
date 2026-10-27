@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "name": "My project",
+  "authority": "my project instructions and issue tracker",
+  "tickets": ["#"],
+  "agents": [
+    { "address": "Planner", "app": "claude", "role": "coordinator", "binding": "launch" },
+    { "address": "Engineer", "app": "codex", "role": "builder", "binding": "launch" }
+  ],
+  "coordinators": { "claude": "Planner", "codex": null }
+}

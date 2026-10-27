@@ -1,0 +1,13 @@
+node_modules
+*.sqlite*
+.env
+.env.*
+!.env.example
+*.bak*
+*.log
+.DS_Store
+coverage/
+dist/
+.sideband/
+sideband.json
+reports/
